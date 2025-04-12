@@ -18,6 +18,7 @@ type
     btnClearAll: TButton;
     chkMarkDone: TCheckBox;
     btnEditTask: TButton;
+    btnSaveInArchive: TButton;
     procedure btnAddSaveTaskClick(Sender: TObject);
     procedure btnRemoveTaskClick(Sender: TObject);
     procedure btnClearAllClick(Sender: TObject);
@@ -26,6 +27,7 @@ type
     procedure edtTaskKeyPress(Sender: TObject; var Key: Char);
     procedure btnEditTaskClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure btnSaveInArchiveClick(Sender: TObject);
   private
     { Private declarations }
     IsUpdating: Boolean;
@@ -33,6 +35,7 @@ type
     const
       TAG_ADD = 0;
       TAG_EDIT = 1;
+      FILE_TASKS = 'tasks.txt';
     procedure UpdateCheckbox(task: string = '');
   public
     { Public declarations }
@@ -130,6 +133,13 @@ begin
     MessageDlg('Selecione uma tarefa para remover.', mtInformation, [mbOk], 0);
 end;
 
+procedure TForm1.btnSaveInArchiveClick(Sender: TObject);
+begin
+  lstTasks.Items.SaveToFile(FILE_TASKS);
+  MessageDlg('Suas tarefas foram salvas para próxima vez que reabrir o sistema!',
+    mtInformation, [mbOk], 0);
+end;
+
 procedure TForm1.chkMarkDoneClick(Sender: TObject);
 var
   indexTask: integer;
@@ -174,6 +184,9 @@ end;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
+  if FileExists(FILE_TASKS) then
+    lstTasks.Items.LoadFromFile(FILE_TASKS);
+
   UpdateTotalTasks;
 end;
 

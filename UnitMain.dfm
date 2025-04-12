@@ -74,7 +74,7 @@ object Form1: TForm1
     OnClick = btnRemoveTaskClick
   end
   object btnClearAll: TButton
-    Left = 296
+    Left = 5
     Top = 382
     Width = 102
     Height = 25
@@ -99,5 +99,14 @@ object Form1: TForm1
     Caption = 'Editar Tarefa'
     TabOrder = 7
     OnClick = btnEditTaskClick
+  end
+  object btnSaveInArchive: TButton
+    Left = 296
+    Top = 382
+    Width = 102
+    Height = 25
+    Caption = 'Salvar em Arquivo'
+    TabOrder = 8
+    OnClick = btnSaveInArchiveClick
   end
 end
