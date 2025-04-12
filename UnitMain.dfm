@@ -65,6 +65,7 @@ object Form1: TForm1
     TabOrder = 3
     OnClick = lstTasksClick
     OnDrawItem = lstTasksDrawItem
+    OnKeyDown = lstTasksKeyDown
   end
   object btnRemoveTask: TButton
     Left = 5

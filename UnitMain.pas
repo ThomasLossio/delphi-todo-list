@@ -30,6 +30,8 @@ type
     procedure btnSaveInArchiveClick(Sender: TObject);
     procedure lstTasksDrawItem(Control: TWinControl; Index: Integer;
       Rect: TRect; State: TOwnerDrawState);
+    procedure lstTasksKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     IsUpdating: Boolean;
@@ -124,12 +126,22 @@ begin
 end;
 
 procedure TForm1.btnRemoveTaskClick(Sender: TObject);
+var
+  CanRemove: Boolean;
 begin
   if lstTasks.ItemIndex >= 0 then
   begin
-    lstTasks.Items.Delete(lstTasks.ItemIndex);
-    UpdateCheckbox;
-    UpdateTotalTasks;
+    CanRemove := MessageDlg('Tem certeza que você quer remover essa task?',
+       mtConfirmation, [mbNo, mbYes], 0) = mrYes;
+
+    if CanRemove then
+    begin
+      lstTasks.Items.Delete(lstTasks.ItemIndex);
+      UpdateCheckbox;
+      UpdateTotalTasks;
+    end
+    else
+      MessageDlg('Procedimento Cancelado, a Task não foi removida!', mtInformation, [mbOk], 0);
   end
   else
     MessageDlg('Selecione uma tarefa para remover.', mtInformation, [mbOk], 0);
@@ -232,6 +244,17 @@ begin
   lstTasks.Canvas.FillRect(Rect);
   lstTasks.Canvas.TextOut(Rect.Left + 2, Rect.Top + 2, task);
 
+end;
+
+procedure TForm1.lstTasksKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  indexTask: integer;
+begin
+  if Key = VK_DELETE then
+  begin
+    btnRemoveTask.Click;
+  end;
 end;
 
 end.
