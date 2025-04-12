@@ -3,28 +3,34 @@
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.UITypes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls;
 
 type
   TForm1 = class(TForm)
     Panel1: TPanel;
     edtTask: TEdit;
     Label1: TLabel;
-    btnAddTask: TButton;
+    btnAddSaveTask: TButton;
     lstTasks: TListBox;
     lblTasks: TLabel;
     btnRemoveTask: TButton;
     btnClearAll: TButton;
     chkMarkDone: TCheckBox;
-    procedure btnAddTaskClick(Sender: TObject);
+    btnEditTask: TButton;
+    procedure btnAddSaveTaskClick(Sender: TObject);
     procedure btnRemoveTaskClick(Sender: TObject);
     procedure btnClearAllClick(Sender: TObject);
     procedure chkMarkDoneClick(Sender: TObject);
     procedure lstTasksClick(Sender: TObject);
+    procedure edtTaskKeyPress(Sender: TObject; var Key: Char);
+    procedure btnEditTaskClick(Sender: TObject);
   private
     { Private declarations }
     IsUpdating: Boolean;
+    const
+      TAG_ADD = 0;
+      TAG_EDIT = 1;
     procedure UpdateCheckbox(task: string = '');
   public
     { Public declarations }
@@ -44,14 +50,27 @@ begin
   IsUpdating := False;
 end;
 
-procedure TForm1.btnAddTaskClick(Sender: TObject);
+procedure TForm1.btnAddSaveTaskClick(Sender: TObject);
 var
-  task: string;
+  task, taskEddited: string;
 begin
   task := Trim(edtTask.Text);
+  taskEddited := '';
+
   if task <> '' then
   begin
-    lstTasks.Items.Add(task);
+    if btnAddSaveTask.Tag = TAG_ADD then
+      lstTasks.Items.Add(task)
+    else if btnAddSaveTask.Tag = TAG_EDIT then
+    begin
+      if chkMarkDone.Checked then
+        taskEddited := '✔ ';
+      taskEddited := taskEddited + task;
+      lstTasks.Items[lstTasks.ItemIndex] := taskEddited;
+
+      btnAddSaveTask.Tag := TAG_ADD;
+    end;
+
     edtTask.Clear;
     edtTask.SetFocus;
   end
@@ -68,6 +87,22 @@ begin
   end
   else
     MessageDlg('Não há tarefas para limpar.', mtInformation, [mbOk], 0);
+end;
+
+procedure TForm1.btnEditTaskClick(Sender: TObject);
+var
+  task: string;
+begin
+  if lstTasks.ItemIndex >= 0 then
+  begin
+    task := lstTasks.Items[lstTasks.ItemIndex];
+    edtTask.Text := Copy(task, 3, Length(task));
+    edtTask.SetFocus;
+    btnAddSaveTask.Tag := TAG_EDIT;
+    btnAddSaveTask.Caption := 'Salvar alteração';
+  end
+  else
+    MessageDlg('Selecione uma tarefa para editar.', mtInformation, [mbOk], 0);
 end;
 
 procedure TForm1.btnRemoveTaskClick(Sender: TObject);
@@ -115,6 +150,12 @@ begin
       lstTasks.Items[indexTask] := Copy(task, 3, Length(task));
   end;
 
+end;
+
+procedure TForm1.edtTaskKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    btnAddSaveTask.Click;
 end;
 
 procedure TForm1.lstTasksClick(Sender: TObject);

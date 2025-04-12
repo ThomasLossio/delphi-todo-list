@@ -4,7 +4,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'To-Do List'
-  ClientHeight = 383
+  ClientHeight = 415
   ClientWidth = 403
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -40,18 +40,19 @@ object Form1: TForm1
   object edtTask: TEdit
     Left = 5
     Top = 64
-    Width = 312
+    Width = 285
     Height = 23
     TabOrder = 1
+    OnKeyPress = edtTaskKeyPress
   end
-  object btnAddTask: TButton
-    Left = 323
+  object btnAddSaveTask: TButton
+    Left = 296
     Top = 63
-    Width = 75
+    Width = 102
     Height = 25
     Caption = 'Nova Tarefa'
     TabOrder = 2
-    OnClick = btnAddTaskClick
+    OnClick = btnAddSaveTaskClick
   end
   object lstTasks: TListBox
     Left = 5
@@ -73,7 +74,7 @@ object Form1: TForm1
   end
   object btnClearAll: TButton
     Left = 296
-    Top = 347
+    Top = 382
     Width = 102
     Height = 25
     Caption = 'Limpar Tudo'
@@ -81,12 +82,21 @@ object Form1: TForm1
     OnClick = btnClearAllClick
   end
   object chkMarkDone: TCheckBox
-    Left = 144
+    Left = 142
     Top = 351
     Width = 118
     Height = 17
     Caption = 'Marcar Conclu'#237'do'
     TabOrder = 6
     OnClick = chkMarkDoneClick
+  end
+  object btnEditTask: TButton
+    Left = 296
+    Top = 347
+    Width = 102
+    Height = 25
+    Caption = 'Editar Tarefa'
+    TabOrder = 7
+    OnClick = btnEditTaskClick
   end
 end
