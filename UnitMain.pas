@@ -25,9 +25,11 @@ type
     procedure lstTasksClick(Sender: TObject);
     procedure edtTaskKeyPress(Sender: TObject; var Key: Char);
     procedure btnEditTaskClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     IsUpdating: Boolean;
+    procedure UpdateTotalTasks;
     const
       TAG_ADD = 0;
       TAG_EDIT = 1;
@@ -48,6 +50,11 @@ begin
   IsUpdating := True;
   chkMarkDone.Checked := task.Contains('✔ ');
   IsUpdating := False;
+end;
+
+procedure TForm1.UpdateTotalTasks;
+begin
+  lblTasks.Caption := 'Tarefas - ' + FormatFloat('000', lstTasks.Items.Count);
 end;
 
 procedure TForm1.btnAddSaveTaskClick(Sender: TObject);
@@ -71,6 +78,7 @@ begin
       btnAddSaveTask.Tag := TAG_ADD;
     end;
 
+    UpdateTotalTasks;
     edtTask.Clear;
     edtTask.SetFocus;
   end
@@ -84,6 +92,7 @@ begin
   begin
     lstTasks.Clear;
     UpdateCheckbox;
+    UpdateTotalTasks;
   end
   else
     MessageDlg('Não há tarefas para limpar.', mtInformation, [mbOk], 0);
@@ -111,6 +120,7 @@ begin
   begin
     lstTasks.Items.Delete(lstTasks.ItemIndex);
     UpdateCheckbox;
+    UpdateTotalTasks;
   end
   else
     MessageDlg('Selecione uma tarefa para remover.', mtInformation, [mbOk], 0);
@@ -156,6 +166,11 @@ procedure TForm1.edtTaskKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
     btnAddSaveTask.Click;
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+  UpdateTotalTasks;
 end;
 
 procedure TForm1.lstTasksClick(Sender: TObject);
