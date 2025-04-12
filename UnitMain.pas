@@ -28,6 +28,8 @@ type
     procedure btnEditTaskClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnSaveInArchiveClick(Sender: TObject);
+    procedure lstTasksDrawItem(Control: TWinControl; Index: Integer;
+      Rect: TRect; State: TOwnerDrawState);
   private
     { Private declarations }
     IsUpdating: Boolean;
@@ -135,7 +137,7 @@ end;
 
 procedure TForm1.btnSaveInArchiveClick(Sender: TObject);
 begin
-  lstTasks.Items.SaveToFile(FILE_TASKS);
+  lstTasks.Items.SaveToFile(FILE_TASKS, TEncoding.UTF8);
   MessageDlg('Suas tarefas foram salvas para próxima vez que reabrir o sistema!',
     mtInformation, [mbOk], 0);
 end;
@@ -199,6 +201,36 @@ begin
     task := lstTasks.Items[lstTasks.ItemIndex];
     UpdateCheckbox(task);
   end;
+
+end;
+
+procedure TForm1.lstTasksDrawItem(Control: TWinControl; Index: Integer;
+  Rect: TRect; State: TOwnerDrawState);
+var
+  task: string;
+begin
+  task := lstTasks.Items[Index];
+
+  if odSelected in State then
+  begin
+    lstTasks.Canvas.Brush.Color := clHighlight;
+    lstTasks.Canvas.Font.Style := [fsBold];
+  end
+  else
+  begin
+    if task.StartsWith('✔ ') then
+    begin
+      lstTasks.Canvas.Font.Color := clGreen;
+      lstTasks.Canvas.Font.Style := [fsItalic, fsStrikeOut];
+    end
+    else
+      lstTasks.Canvas.Font.Color := clWindowText;
+
+    lstTasks.Canvas.Brush.Color := clWindow;
+  end;
+
+  lstTasks.Canvas.FillRect(Rect);
+  lstTasks.Canvas.TextOut(Rect.Left + 2, Rect.Top + 2, task);
 
 end;
 

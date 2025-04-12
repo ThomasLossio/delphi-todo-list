@@ -60,9 +60,11 @@ object Form1: TForm1
     Top = 117
     Width = 393
     Height = 209
+    Style = lbOwnerDrawFixed
     ItemHeight = 15
     TabOrder = 3
     OnClick = lstTasksClick
+    OnDrawItem = lstTasksDrawItem
   end
   object btnRemoveTask: TButton
     Left = 5
