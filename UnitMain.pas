@@ -35,11 +35,15 @@ type
   private
     { Private declarations }
     IsUpdating: Boolean;
-    procedure UpdateTotalTasks;
     const
       TAG_ADD = 0;
       TAG_EDIT = 1;
       FILE_TASKS = 'tasks.txt';
+    procedure UpdateTotalTasks;
+    procedure LoadTasksFromFile(filename: string = FILE_TASKS);
+    procedure SaveTasksToFile(filename: string = FILE_TASKS);
+    procedure SaveTaskEddited(task: string);
+    procedure AddNewTask(task: string);
     procedure UpdateCheckbox(task: string = '');
   public
     { Public declarations }
@@ -64,26 +68,50 @@ begin
   lblTasks.Caption := 'Tarefas - ' + FormatFloat('000', lstTasks.Items.Count);
 end;
 
+procedure TForm1.LoadTasksFromFile(filename: string = FILE_TASKS);
+begin
+  if FileExists(filename) then
+    lstTasks.Items.LoadFromFile(filename);
+end;
+
+procedure TForm1.SaveTasksToFile(filename: string = FILE_TASKS);
+begin
+  lstTasks.Items.SaveToFile(filename, TEncoding.UTF8);
+  MessageDlg('Suas tarefas foram salvas para próxima vez que reabrir o sistema!',
+    mtInformation, [mbOk], 0);
+end;
+
+procedure TForm1.SaveTaskEddited(task: string);
+var
+  taskEddited: string;
+begin
+  if chkMarkDone.Checked then
+    taskEddited := '✔ ';
+  taskEddited := taskEddited + task;
+  lstTasks.Items[lstTasks.ItemIndex] := taskEddited;
+
+  btnAddSaveTask.Tag := TAG_ADD;
+  btnAddSaveTask.Caption := 'Nova Tarefa';
+end;
+
+procedure TForm1.AddNewTask(task: string);
+begin
+  lstTasks.Items.Add(task)
+end;
+
 procedure TForm1.btnAddSaveTaskClick(Sender: TObject);
 var
-  task, taskEddited: string;
+  task: string;
 begin
   task := Trim(edtTask.Text);
-  taskEddited := '';
+
 
   if task <> '' then
   begin
     if btnAddSaveTask.Tag = TAG_ADD then
-      lstTasks.Items.Add(task)
+      AddNewTask(task)
     else if btnAddSaveTask.Tag = TAG_EDIT then
-    begin
-      if chkMarkDone.Checked then
-        taskEddited := '✔ ';
-      taskEddited := taskEddited + task;
-      lstTasks.Items[lstTasks.ItemIndex] := taskEddited;
-
-      btnAddSaveTask.Tag := TAG_ADD;
-    end;
+      SaveTaskEddited(task);
 
     UpdateTotalTasks;
     edtTask.Clear;
@@ -149,9 +177,7 @@ end;
 
 procedure TForm1.btnSaveInArchiveClick(Sender: TObject);
 begin
-  lstTasks.Items.SaveToFile(FILE_TASKS, TEncoding.UTF8);
-  MessageDlg('Suas tarefas foram salvas para próxima vez que reabrir o sistema!',
-    mtInformation, [mbOk], 0);
+  SaveTasksToFile;
 end;
 
 procedure TForm1.chkMarkDoneClick(Sender: TObject);
@@ -198,9 +224,7 @@ end;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
-  if FileExists(FILE_TASKS) then
-    lstTasks.Items.LoadFromFile(FILE_TASKS);
-
+  LoadTasksFromFile;
   UpdateTotalTasks;
 end;
 
