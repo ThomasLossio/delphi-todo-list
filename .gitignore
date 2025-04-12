@@ -1,0 +1,39 @@
+# Arquivos binários
+*.exe
+*.dll
+*.dcu
+*.bpl
+*.dcp
+*.map
+*.tds
+
+# Arquivos de build temporários
+*.obj
+*.lib
+*.o
+*.~*
+
+# Configs e backups da IDE
+*.dsk
+*.local
+*.identcache
+*.tvsconfig
+*.cfg
+*.bak
+
+# Arquivos de histórico da IDE
+__history/
+__recovery/
+
+# Diretórios de build (Win32/Win64 Debug/Release)
+Win32/Debug/
+Win32/Release/
+Win64/Debug/
+Win64/Release/
+
+# Arquivos de log e temporários
+*.log
+*.tmp
+
+# Arquivos específicos da Community/Studio
+*.stat
