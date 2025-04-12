@@ -105,7 +105,11 @@ begin
   if lstTasks.ItemIndex >= 0 then
   begin
     task := lstTasks.Items[lstTasks.ItemIndex];
-    edtTask.Text := Copy(task, 3, Length(task));
+    if task.StartsWith('✔ ') then
+      edtTask.Text := Copy(task, 3, Length(task))
+    else
+      edtTask.Text := task;
+
     edtTask.SetFocus;
     btnAddSaveTask.Tag := TAG_EDIT;
     btnAddSaveTask.Caption := 'Salvar alteração';
