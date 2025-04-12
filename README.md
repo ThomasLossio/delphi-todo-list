@@ -13,6 +13,10 @@ A simple and complete To-Do List application developed with **Delphi 12.1 Commun
 - UTF-8 encoding support for special characters like ✔
 - Modularized and well-structured source code
 
+## 🖼️ Screenshot
+![image](https://github.com/user-attachments/assets/8b08f9ee-93fd-4f41-9ed8-0a71c8b42051)
+
+
 ## 🚀 How to Run
 
 1. Open the project in **Delphi 12.1 Community Edition**
@@ -37,4 +41,4 @@ MIT – free to use, modify, and distribute.
 
 ---
 
-Made with ☕, dedication and a desire to revive classic desktop apps.
+Made with ☕ and a little bit of 🙃.
